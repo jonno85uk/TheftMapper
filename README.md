@@ -2,7 +2,7 @@
 
 ## Introduction
 In Bristol, England (and in England in general) there is a significant (motor)bike theft problem. This program
-was created to map the reports of theft onto a map and provide some level of interaction.
+was created to map the reports of theft and provide some level of interaction.
 
 ## Installation
 
