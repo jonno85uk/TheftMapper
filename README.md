@@ -20,7 +20,7 @@ Shown below is data scraped from facebook for a 6-week period (from January 2020
 ### Key
 The generated map visualises the various types of reports in various manners.
 
-* Red items indicate a stolen bike.
+* Red items indicate where a bike was stolen from.
 * Orange items indicate a burnt wreck of a bike.
 * Blue items indicate a sighting of a stolen bike (in use on the roads)
 * Green items indicate a found motorbike (not a wreck)
@@ -51,3 +51,17 @@ A web-address to the report. It can be left empty.
 The report type. Valid values are: *burnt*, *found*, *sighting*, *stolen*. (case-insensitive)
 ### notes (optional)
 Any extra information. Currently not used.
+
+## Usage
+<pre><code>usage: theftmapper.py [-h] [-i DATAFILE] [-o SAVEFILE] [-z ZOOM] [-l LOCATION] [-c CIRCLESIZE]
+
+Place theft reports onto a map
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -i DATAFILE    csv file of the reports. default='data.csv'
+  -o SAVEFILE    The name of the created html file. default='thefts.html'
+  -z ZOOM        Zoom level of the map on file open. default='12'
+  -l LOCATION    Location to center map on file open e.g. longitude,latitude. default='51.4545, -2.5879'
+  -c CIRCLESIZE  A variable to adjust the size of the displayed circles. default='1000'
+</code></pre>

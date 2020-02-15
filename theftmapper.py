@@ -35,6 +35,7 @@ TYPE_INDEX: Final = 6
 NOTES_INDEX: Final = 7
 HTML_SAVE_FILE: Final = "thefts.html"
 DEFAULT_DAYS: Final = 0
+DEFAULT_CIRCLE_SIZE: Final = 1000
 
 
 class EntryType(Enum):
@@ -55,6 +56,9 @@ parser.add_argument("-z", dest="zoom", default=DEFAULT_ZOOM,
 parser.add_argument("-l", dest="location", default=DEFAULT_LOCATION,
                     help="Location to center map on file open e.g. longitude,latitude. default='{0}'"
                     .format(DEFAULT_LOCATION))
+parser.add_argument("-c", dest="circlesize", default=DEFAULT_CIRCLE_SIZE,
+                    help="A variable to adjust the size of the displayed circles. default='{0}'"
+                    .format(DEFAULT_CIRCLE_SIZE))
 # TODO: day filter
 # parser.add_argument("-d", dest="days", default=0,
 #                     help="The amount of days (from now) of data to plot on the map (0==all days possible). "
@@ -134,7 +138,7 @@ for e in entries:
     else:
         folium.Circle(
             location=(e.longitude, e.latitude),
-            radius=1000,
+            radius=DEFAULT_CIRCLE_SIZE,
             color=colour,
             fill=True,
             popup="{0}\n{1}".format(e.date.date(), link),
