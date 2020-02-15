@@ -1,4 +1,5 @@
-# TheftMapper
+# TheftMapper [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) 
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
 ## Introduction
 In Bristol, England (and in England in general) there is a significant (motor)bike theft problem. This program
