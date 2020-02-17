@@ -100,7 +100,7 @@ class Entry:
                "Link = {self.link}".format(self=self)
 
 
-now = datetime.utcnow()
+now = datetime.now()
 details = open(args.datafile, "r")
 details.readline()  # Ignore first line
 entries = []
