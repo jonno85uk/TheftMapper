@@ -59,6 +59,17 @@ parser.add_argument("-l", dest="location", default=DEFAULT_LOCATION,
 parser.add_argument("-c", dest="circlesize", default=DEFAULT_CIRCLE_SIZE,
                     help="A variable to adjust the size of the displayed circles. default='{0}'"
                     .format(DEFAULT_CIRCLE_SIZE))
+parser.add_argument("--accurate", dest="accurateonly", default=False, action='store_true',
+                    help="Only display reports with accurate locations")
+parser.add_argument("--no-stolen", dest="nostolen", default=False, action='store_true',
+                    help="Do not display 'stolen' reports")
+parser.add_argument("--no-found", dest="nofound", default=False, action='store_true',
+                    help="Do not display 'found' reports")
+parser.add_argument("--no-sightings", dest="nosighting", default=False, action='store_true',
+                    help="Do not display 'sighting' reports")
+parser.add_argument("--no-burnt", dest="noburnt", default=False, action='store_true',
+                    help="Do not display 'burnt' reports")
+
 # TODO: day filter
 # parser.add_argument("-d", dest="days", default=0,
 #                     help="The amount of days (from now) of data to plot on the map (0==all days possible). "
@@ -112,6 +123,16 @@ folium.LayerControl().add_to(data_map)
 # TODO: group inaccurate reports into one and display multiple links & dates
 reports = 0
 for e in entries:
+    if (not e.accurate) and args.accurateonly:
+        continue
+    if (e.entry_type == EntryType.STOLEN) and args.nostolen:
+        continue
+    if (e.entry_type == EntryType.FOUND) and args.nofound:
+        continue
+    if (e.entry_type == EntryType.BURNT) and args.noburnt:
+        continue
+    if (e.entry_type == EntryType.SIGHTING) and args.nosighting:
+        continue
     colour = None
     sign = None
     prefix = None
@@ -151,8 +172,9 @@ for e in entries:
             popup="{0}\n{1}".format(e.date.date(), link),
             icon=folium.Icon(color=colour, icon=sign, prefix=prefix)
         ).add_to(data_map)
-    
+    reports += 1
+
 
 data_map.save(args.savefile)
 
-print("Map created with {0} reports".format(len(entries)))
+print("Map created with {0}/{1} reports".format(reports, len(entries)))
