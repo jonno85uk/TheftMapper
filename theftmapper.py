@@ -101,9 +101,16 @@ for line in details.readlines():
               url=details[LINK_INDEX], notes=details[NOTES_INDEX])
     entries.append(e)
 
-m = folium.Map(location=args.location.split(','), zoom_start=DEFAULT_ZOOM)
+
+data_map = folium.Map(tiles=None, location=args.location.split(','), zoom_start=DEFAULT_ZOOM, prefer_canvas=True,
+                      control_scale=True)
+folium.TileLayer(tiles='openstreetmap', name="OpenStreetMap").add_to(data_map)
+folium.TileLayer(tiles='stamen terrain', name="Terrain").add_to(data_map)
+folium.LayerControl().add_to(data_map)
 
 
+# TODO: group inaccurate reports into one and display multiple links & dates
+reports = 0
 for e in entries:
     colour = None
     sign = None
@@ -134,17 +141,18 @@ for e in entries:
             location=[e.longitude, e.latitude],
             popup="{0}\n{1}".format(e.date.date(), link),
             icon=folium.Icon(color=colour, icon=sign, prefix=prefix)
-        ).add_to(m)
+        ).add_to(data_map)
     else:
         folium.Circle(
             location=(e.longitude, e.latitude),
-            radius=arg.circlesize,
+            radius=args.circlesize,
             color=colour,
             fill=True,
             popup="{0}\n{1}".format(e.date.date(), link),
             icon=folium.Icon(color=colour, icon=sign, prefix=prefix)
-        ).add_to(m)
+        ).add_to(data_map)
+    
 
-m.save(args.savefile)
+data_map.save(args.savefile)
 
 print("Map created with {0} reports".format(len(entries)))
