@@ -18,7 +18,7 @@
 
 import folium
 from typing import Final
-import datetime
+from datetime import datetime
 from enum import Enum
 import argparse
 
@@ -59,6 +59,9 @@ parser.add_argument("-l", dest="location", default=DEFAULT_LOCATION,
 parser.add_argument("-c", dest="circlesize", default=DEFAULT_CIRCLE_SIZE,
                     help="A variable to adjust the size of the displayed circles. default='{0}'"
                     .format(DEFAULT_CIRCLE_SIZE))
+parser.add_argument("-d", dest="days", default=0,
+                    help="The amount of days (from now) of data to plot on the map (0==all days possible). "
+                         "default='{0}'".format(DEFAULT_DAYS))
 parser.add_argument("--accurate", dest="accurateonly", default=False, action='store_true',
                     help="Only display reports with accurate locations")
 parser.add_argument("--no-stolen", dest="nostolen", default=False, action='store_true',
@@ -70,30 +73,25 @@ parser.add_argument("--no-sightings", dest="nosighting", default=False, action='
 parser.add_argument("--no-burnt", dest="noburnt", default=False, action='store_true',
                     help="Do not display 'burnt' reports")
 
-# TODO: day filter
-# parser.add_argument("-d", dest="days", default=0,
-#                     help="The amount of days (from now) of data to plot on the map (0==all days possible). "
-#                          "default='{0}'".format(DEFAULT_DAYS))
-
 args = parser.parse_args()
 
 
 class Entry:
     def __init__(self, date, longitude, latitude, accurate, entry_type, url=None, notes=None):
-        self.date = datetime.datetime.strptime(date, "%d/%m/%Y")
+        self.date = datetime.strptime(date, "%d/%m/%Y")
         self.longitude = longitude
         self.latitude = latitude
         self.accurate = accurate
-        if str(entry_type).lower() == "stolen":
+        if entry_type.lower() == "stolen":
             self.entry_type = EntryType.STOLEN
-        elif str(entry_type).lower() == "found":
+        elif entry_type.lower() == "found":
             self.entry_type = EntryType.FOUND
-        elif str(entry_type).lower() == "sighting":
+        elif entry_type.lower() == "sighting":
             self.entry_type = EntryType.SIGHTING
-        elif str(entry_type).lower() == "burnt":
+        elif entry_type.lower() == "burnt":
             self.entry_type = EntryType.BURNT
         else:
-            self.entry_type = EntryType.UNKNOWN
+            raise Exception("Unknown report entry type '{0}'".format(entry_type))
         self.link = url
         self.notes = notes
 
@@ -102,15 +100,21 @@ class Entry:
                "Link = {self.link}".format(self=self)
 
 
+now = datetime.utcnow()
 details = open(args.datafile, "r")
 details.readline()  # Ignore first line
 entries = []
+line_count = 1
 for line in details.readlines():
     details = line.split(',')
     e = Entry(date=details[DATE_INDEX], longitude=details[LONG_INDEX], latitude=details[LAT_INDEX],
               accurate=details[ACCURATE_INDEX].lower() == "yes", entry_type=details[TYPE_INDEX],
-              url=details[LINK_INDEX], notes=details[NOTES_INDEX])
-    entries.append(e)
+              url=details[LINK_INDEX], notes=",".join(details[NOTES_INDEX:-1]))
+    if e.date > now:
+        print("Excluding invalid entry on line {0}. \tDate '{1}' is in the future".format(line_count, e.date.date()))
+    else:
+        entries.append(e)
+    line_count += 1
 
 
 data_map = folium.Map(tiles=None, location=args.location.split(','), zoom_start=DEFAULT_ZOOM, prefer_canvas=True,
@@ -123,6 +127,7 @@ folium.LayerControl().add_to(data_map)
 # TODO: group inaccurate reports into one and display multiple links & dates
 reports = 0
 for e in entries:
+    # Filtering
     if (not e.accurate) and args.accurateonly:
         continue
     if (e.entry_type == EntryType.STOLEN) and args.nostolen:
@@ -132,6 +137,8 @@ for e in entries:
     if (e.entry_type == EntryType.BURNT) and args.noburnt:
         continue
     if (e.entry_type == EntryType.SIGHTING) and args.nosighting:
+        continue
+    if (int(args.days) > 0) and ((now - e.date).days > int(args.days)):
         continue
     colour = None
     sign = None
@@ -177,4 +184,4 @@ for e in entries:
 
 data_map.save(args.savefile)
 
-print("Map created with {0}/{1} reports".format(reports, len(entries)))
+print("Map created with {0}/{1} reports. \nFilename='{2}'".format(reports, len(entries), args.savefile))
