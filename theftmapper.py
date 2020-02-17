@@ -138,7 +138,7 @@ for e in entries:
     else:
         folium.Circle(
             location=(e.longitude, e.latitude),
-            radius=DEFAULT_CIRCLE_SIZE,
+            radius=arg.circlesize,
             color=colour,
             fill=True,
             popup="{0}\n{1}".format(e.date.date(), link),
