@@ -53,15 +53,21 @@ The report type. Valid values are: *burnt*, *found*, *sighting*, *stolen*. (case
 Any extra information. Currently not used.
 
 ## Usage
-<pre><code>usage: theftmapper.py [-h] [-i DATAFILE] [-o SAVEFILE] [-z ZOOM] [-l LOCATION] [-c CIRCLESIZE]
+<pre><code>usage: theftmapper.py [-h] [-i DATAFILE] [-o SAVEFILE] [-z ZOOM] [-l LOCATION] [-c CIRCLESIZE] [-d DAYS] [--accurate] [--no-stolen] [--no-found] [--no-sightings] [--no-burnt]
 
 Place theft reports onto a map
 
 optional arguments:
-  -h, --help     show this help message and exit
-  -i DATAFILE    csv file of the reports. default='data.csv'
-  -o SAVEFILE    The name of the created html file. default='thefts.html'
-  -z ZOOM        Zoom level of the map on file open. default='12'
-  -l LOCATION    Location to center map on file open e.g. longitude,latitude. default='51.4545, -2.5879'
-  -c CIRCLESIZE  A variable to adjust the size of the displayed circles. default='1000'
+  -h, --help      show this help message and exit
+  -i DATAFILE     csv file of the reports. default='data.csv'
+  -o SAVEFILE     The name of the created html file. default='thefts.html'
+  -z ZOOM         Zoom level of the map on file open. default='12'
+  -l LOCATION     Location to center map on file open e.g. longitude,latitude. default='51.4545, -2.5879'
+  -c CIRCLESIZE   A variable to adjust the size of the displayed circles. default='1000'
+  -d DAYS         The amount of days (from now) of data to plot on the map (0==all days possible). default='0'
+  --accurate      Only display reports with accurate locations
+  --no-stolen     Do not display 'stolen' reports
+  --no-found      Do not display 'found' reports
+  --no-sightings  Do not display 'sighting' reports
+  --no-burnt      Do not display 'burnt' reports
 </code></pre>
