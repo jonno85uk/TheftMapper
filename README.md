@@ -14,7 +14,7 @@ To install folium:
 
 ## Map
 ### Example
-Shown below is data scraped from facebook for a 6-week period (from January 2020) in Bristol, England.
+Shown below is data scraped from facebook from November 2019 in Bristol, England.
 ![](example.png)
 
 ### Key
