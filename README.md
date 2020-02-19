@@ -15,7 +15,7 @@ To install folium:
 ## Map
 ### Example
 Shown below is data scraped from facebook from November 2019 in Bristol, England.
-![](example.png)
+![](november19tofebuary20.png)
 
 ### Key
 The generated map visualises the various types of reports in various manners.
