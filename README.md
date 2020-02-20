@@ -44,7 +44,7 @@ Decimal number of the theft location. Do not use N/S. To indicate a Southern lon
 ### latitude
 Decimal number of the theft latitude. Do not use E/W. To indicate a Western latitude use a negative(-) symbol
 ### accurate
-As some reports can be vague it is better to visualise them as such. Yes==accurate. No==inaccurate. (case-insensitive)
+As locations can be vague it is better to visualise them as such. Yes==accurate. No==inaccurate. (case-insensitive)
 ### link (optional)
 A web-address to the report. It can be left empty.
 ### type
